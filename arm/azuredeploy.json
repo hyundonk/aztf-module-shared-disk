@@ -1,0 +1,40 @@
+{ 
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dataDiskName": {
+      "type": "string",
+      "defaultValue": "mySharedDisk"
+    },
+    "dataDiskSizeGB": {
+      "type": "string",
+      "defaultValue": "1024"
+    },
+    "maxShares": {
+      "type": "string",
+      "defaultValue": "2"
+    }
+  },
+  "variables": {
+    "int_dataDiskSizeGB" : "[int(parameters('dataDiskSizeGB'))]",
+    "int_maxShares" : "[int(parameters('maxShares'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/disks",
+      "name": "[parameters('dataDiskName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2019-07-01",
+      "sku": {
+        "name": "Premium_LRS"
+      },
+      "properties": {
+        "creationData": {
+          "createOption": "Empty"
+        },
+        "diskSizeGB": "[variables('int_dataDiskSizeGB')]",
+        "maxShares": "[variables('int_maxShares')]"
+      }
+    }
+  ] 
+}
